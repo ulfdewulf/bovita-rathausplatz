@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BoVita Visualisierungskonzept - Rathausplatz 6, Brugg</title>
 <meta name="description" content="Gerüstplane und Absperr-Plane, Rathausplatz 6 Brugg. Varianten ansehen und Favorit auswählen.">
 <style>
@@ -157,8 +157,9 @@
   .vcard.no .pick,.feature.no .pick,.highlight.no .pick{border-color:#E2A6A6;color:#B23B3B;}
 
   /* lightbox */
-  .lb{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
-    background:rgba(8,14,26,.88);backdrop-filter:blur(6px);padding:clamp(14px,4vw,46px);}
+  .lb{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    background:rgba(8,14,26,.88);backdrop-filter:blur(6px);
+    padding:max(clamp(14px,4vw,46px),env(safe-area-inset-top)) clamp(14px,4vw,46px) max(clamp(14px,4vw,46px),env(safe-area-inset-bottom));}
   .lb.open{display:flex;}
   .lb-inner{width:min(940px,100%);max-height:94vh;display:flex;flex-direction:column;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);}
   .lb-stage{background:#0E1F3A;display:flex;align-items:center;justify-content:center;padding:18px;min-height:0;}
@@ -179,17 +180,17 @@
   .lb-comment label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:7px;}
   .lb-comment textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;font-size:15px;font-family:inherit;line-height:1.45;resize:vertical;color:var(--ink);}
   .lb-comment textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(76,132,196,.15);}
-  .lb-x{position:absolute;top:clamp(12px,3vw,22px);right:clamp(12px,3vw,22px);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:24px;line-height:1;cursor:pointer;z-index:2;}
+  .lb-x{position:fixed;top:max(clamp(12px,3vw,22px),calc(env(safe-area-inset-top) + 10px));right:max(clamp(12px,3vw,22px),calc(env(safe-area-inset-right) + 10px));width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:24px;line-height:1;cursor:pointer;z-index:3;}
   .lb-x:hover{background:rgba(255,255,255,.3);}
-  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:30px;line-height:1;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;padding-bottom:4px;}
+  .lb-nav{position:fixed;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:30px;line-height:1;cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center;padding-bottom:4px;}
   .lb-nav:hover{background:rgba(255,255,255,.3);}
   .lb-prev{left:clamp(8px,2vw,24px);} .lb-next{right:clamp(8px,2vw,24px);}
   @media (max-width:560px){ .lb-nav{width:44px;height:44px;font-size:26px;} .lb-stage img{max-height:52vh;} .lb-acts{flex-direction:column;} .lb-x{background:rgba(255,255,255,.22);} }
 
   /* selection bar */
-  .selbar{position:fixed;left:0;right:0;bottom:0;z-index:60;transform:translateY(120%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  .selbar{position:fixed;left:0;right:0;bottom:0;z-index:60;transform:translateY(140%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
     background:rgba(19,41,75,.97);backdrop-filter:blur(10px);color:#fff;border-top:1px solid rgba(255,255,255,.12);
-    box-shadow:0 -16px 44px rgba(0,0,0,.28);}
+    box-shadow:0 -16px 44px rgba(0,0,0,.28);padding-bottom:env(safe-area-inset-bottom);}
   .selbar.show{transform:translateY(0);}
   .selinner{max-width:1200px;margin:0 auto;padding:14px clamp(18px,5vw,56px);display:flex;align-items:center;justify-content:space-between;gap:16px;}
   .selinfo{font-size:15px;font-weight:700;min-width:0;}
@@ -498,7 +499,7 @@
         </div>
         <div class="lb-comment" id="lbcomment">
           <label for="lbtext">Was passt nicht? Schreib mir kurz, was du anders möchtest:</label>
-          <textarea id="lbtext" rows="2" maxlength="280" placeholder="z.B. Bild zu dunkel, QR zu klein, andere Headline ..." oninput="lbComment()"></textarea>
+          <textarea id="lbtext" rows="2" maxlength="280" placeholder="z.B. Bild zu dunkel, QR zu klein, andere Headline ..." oninput="lbComment()" onfocus="var t=this;setTimeout(function(){t.scrollIntoView({block:'center',behavior:'smooth'});},320)"></textarea>
         </div>
       </div>
     </div>
@@ -529,7 +530,7 @@
     var bar = document.getElementById('selbar');
     document.getElementById('selinfo').innerHTML = 'Deine Rückmeldung: <b>'+likes+'</b> gefallen' + (dis ? ' · <b>'+dis+'</b> eher nicht' : '');
     document.getElementById('wasend').href = buildLink();
-    if(likes+dis){ bar.classList.add('show'); document.body.style.paddingBottom='84px'; }
+    if(likes+dis){ bar.classList.add('show'); document.body.style.paddingBottom=(bar.offsetHeight+14)+'px'; }
     else { bar.classList.remove('show'); document.body.style.paddingBottom='0'; }
     if(lbIsOpen()) renderLB();
   }
