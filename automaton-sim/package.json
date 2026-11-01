@@ -1,0 +1,31 @@
+{
+  "name": "automaton-sim",
+  "version": "0.1.0",
+  "description": "Autonomous AI business agent - economic simulation (SIMULATION-first fork of Conway Automaton concepts)",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "bin": {
+    "automaton-sim": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "sim": "tsx src/cli.ts run",
+    "sim:all": "tsx src/cli.ts run-all",
+    "dashboard": "tsx src/cli.ts dashboard",
+    "compare": "tsx src/cli.ts compare",
+    "export": "tsx src/cli.ts export",
+    "demo": "tsx src/cli.ts demo"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0",
+    "vitest": "^2.1.0"
+  }
+}
